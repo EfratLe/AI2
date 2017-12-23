@@ -8,6 +8,7 @@ import utils
 import copy
 import players.interactive
 
+
 class GameRunner:
     def __init__(self, setup_time, time_per_k_turns, k, verbose, x_player, o_player):
         """Game runner initialization.
@@ -37,7 +38,7 @@ class GameRunner:
         o_is_interactive = sys.modules[self.o_player].Player == players.interactive.Player
         
         self.player_move_times = {
-            X_PLAYER : utils.INFINITY if x_is_interactive else self.time_per_k_turns,
+            X_PLAYER: utils.INFINITY if x_is_interactive else self.time_per_k_turns,
             O_PLAYER: utils.INFINITY if o_is_interactive else self.time_per_k_turns,
         }
 
@@ -65,7 +66,7 @@ class GameRunner:
         x_player_exceeded = self.setup_player(sys.modules[self.x_player].Player, X_PLAYER)
         o_player_exceeded = self.setup_player(sys.modules[self.o_player].Player, O_PLAYER)
         winner = self.handle_time_expired(x_player_exceeded, o_player_exceeded)
-        if winner: # One of the players exceeded the setup time
+        if winner:  # One of the players exceeded the setup time
             return winner
 
         board_state = GameState()
@@ -87,7 +88,7 @@ class GameRunner:
                     break
                 # Get move from player
                 move, run_time = utils.run_with_limited_time(
-                    player.get_move, (copy.deepcopy(board_state), possible_moves), {}, remaining_run_time*1.5) ###
+                    player.get_move, (copy.deepcopy(board_state), possible_moves), {}, remaining_run_time*1.5)
                 
                 remaining_run_times[board_state.curr_player] -= run_time
                 if remaining_run_times[board_state.curr_player] < 0:
@@ -97,11 +98,10 @@ class GameRunner:
                 winner = self.make_winner_result(OPPONENT_COLOR[board_state.curr_player])
                 break
             
-            board_state.perform_move(move[0],move[1])
+            board_state.perform_move(move[0], move[1])
             if self.verbose == 'y':
                 print('Player ' + repr(player) + ' performed the move: [' + str(move[0]) + ', ' + str(move[1]) + ']')
-            
-            
+
             if board_state.curr_player == X_PLAYER:
                 k_count = (k_count + 1) % self.k
                 if k_count == 0:
