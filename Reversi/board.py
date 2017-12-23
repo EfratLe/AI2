@@ -105,7 +105,7 @@ class GameState:
 
         
     def draw_board(self):
-    # This function prints out the board that it was passed. Returns None.
+        # This function prints out the board that it was passed. Returns None.
         HLINE = '  +---+---+---+---+---+---+---+---+'
         VLINE = '  |   |   |   |   |   |   |   |   |'
 

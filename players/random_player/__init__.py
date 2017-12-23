@@ -12,5 +12,3 @@ class Player(abstract.AbstractPlayer):
 
     def __repr__(self):
         return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'random')
-
-# c:\python35\python run_game.py 3 3 3 y random_player random_player

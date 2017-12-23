@@ -10,7 +10,7 @@ Like this: 'class Player(abstract.AbstractPlayer):'
         """Player initialization.
 
         :param setup_time: Allowed setup time in seconds, float.
-        :param player_color: A String representing this player's type.
+        :param player_type: A String representing this player's type.
         :param time_per_k_turns: Allowed move calculation time per k turns.
         :param k: The k above.
         """

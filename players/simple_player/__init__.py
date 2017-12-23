@@ -83,5 +83,3 @@ class Player(abstract.AbstractPlayer):
 
     def __repr__(self):
         return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'simple')
-
-# c:\python35\python.exe run_game.py 3 3 3 y simple_player random_player
