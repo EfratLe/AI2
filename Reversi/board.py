@@ -24,7 +24,7 @@ class GameState:
         self.curr_player = X_PLAYER
     
     def isOnBoard(self, x, y):
-    # Returns True if the coordinates are located on the board.
+        # Returns True if the coordinates are located on the board.
         return x >= 0 and x <= 7 and y >= 0 and y <=7
 
     def isValidMove(self, xstart, ystart):
@@ -125,7 +125,7 @@ class GameState:
         """This object can be inserted into a set or as dict key. NOTICE: Changing the object after it has been inserted
         into a set or dict (as key) may have unpredicted results!!!
         """
-        return hash(','.join([self.board[(i,j)]
+        return hash(','.join([self.board[i][j]
                               for i in range(BOARD_ROWS)
                               for j in range(BOARD_COLS)] + [self.curr_player]))
 
