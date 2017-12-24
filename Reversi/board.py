@@ -3,6 +3,7 @@
 from __future__ import print_function, division
 from .consts import *
 
+
 class GameState:
     def __init__(self):
         """ Initializing the board and current player.
@@ -36,8 +37,8 @@ class GameState:
         tilesToFlip = []
         for xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]:
             x, y = xstart, ystart
-            x += xdirection # first step in the direction
-            y += ydirection # first step in the direction
+            x += xdirection  # first step in the direction
+            y += ydirection  # first step in the direction
             if self.isOnBoard(x, y) and self.board[x][y] == OPPONENT_COLOR[self.curr_player]:
                 # There is a piece belonging to the other player next to our piece.
                 x += xdirection
@@ -47,12 +48,13 @@ class GameState:
                 while self.board[x][y] == OPPONENT_COLOR[self.curr_player]:
                     x += xdirection
                     y += ydirection
-                    if not self.isOnBoard(x, y): # break out of while loop, then continue in for loop
+                    if not self.isOnBoard(x, y):  # break out of while loop, then continue in for loop
                         break
                 if not self.isOnBoard(x, y):
                     continue
                 if self.board[x][y] == self.curr_player:
-                    # There are pieces to flip over. Go in the reverse direction until we reach the original space, noting all the tiles along the way.
+                    # There are pieces to flip over. Go in the reverse direction until we reach the original space,
+                    # noting all the tiles along the way.
                     while True:
                         x -= xdirection
                         y -= ydirection
@@ -60,11 +62,10 @@ class GameState:
                             break
                         tilesToFlip.append([x, y])
 
-        self.board[xstart][ystart] = EM # restore the empty space
-        if len(tilesToFlip) == 0: # If no tiles were flipped, this is not a valid move.
+        self.board[xstart][ystart] = EM  # restore the empty space
+        if len(tilesToFlip) == 0:  # If no tiles were flipped, this is not a valid move.
             return False
         return tilesToFlip
-
 
     def get_possible_moves(self):
         validMoves = []
@@ -103,7 +104,6 @@ class GameState:
         else:
             return TIE
 
-        
     def draw_board(self):
         # This function prints out the board that it was passed. Returns None.
         HLINE = '  +---+---+---+---+---+---+---+---+'
@@ -131,4 +131,3 @@ class GameState:
 
     def __eq__(self, other):
         return isinstance(other, GameState) and self.board == other.board and self.curr_player == other.curr_player
-

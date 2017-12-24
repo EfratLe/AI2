@@ -38,7 +38,7 @@ class Player(abstract.AbstractPlayer):
         # Get the best move according the utility function
         for move in possible_moves:
             new_state = copy.deepcopy(game_state)
-            new_state.perform_move(move[0],move[1])
+            new_state.perform_move(move[0], move[1])
             if self.utility(new_state) > self.utility(next_state):
                 next_state = new_state
                 best_move = move
