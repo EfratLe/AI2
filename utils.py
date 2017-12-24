@@ -5,6 +5,9 @@ from threading import Thread
 from multiprocessing import Queue
 import time
 import copy
+import random
+from Reversi.board import GameState
+from Reversi.consts import *
 
 INFINITY = float(6000)
 
@@ -81,6 +84,27 @@ class MiniMaxAlgorithm:
         self.no_more_time = no_more_time
         self.selective_deepening = selective_deepening
 
+    def recursive_search(self, state, depth,max_or_min):
+        child_moves=state.get_possible_moves()
+        if len(child_moves)==0 or self.no_more_time():
+            return self.utility(state)
+        if depth <= 0:
+            if not self.selective_deepening(state):
+                return self.utility(state)
+        if max_or_min:
+            curr=-INFINITY
+        else:
+            curr=INFINITY
+        for move in child_moves:
+            new_state = copy.deepcopy(state)
+            new_state.perform_move(move[0], move[1])
+            new_state.curr_player = OPPONENT_COLOR[new_state.curr_player]
+            if max_or_min:
+                curr=max(curr,self.recursive_search(new_state,depth-1,not max_or_min))
+            else:
+                curr=min(curr,self.recursive_search(new_state,depth-1,not max_or_min))
+        return curr
+
     def search(self, state, depth, maximizing_player):
         """Start the MiniMax algorithm.
 
@@ -89,7 +113,33 @@ class MiniMaxAlgorithm:
         :param maximizing_player: Whether this is a max node (True) or a min node (False).
         :return: A tuple: (The min max algorithm value, The move in case of max node or None in min mode)
         """
-        return self.utility(state), None
+        child_moves = state.get_possible_moves()
+        if len(child_moves)==0 or depth == 0 or self.no_more_time():
+            return (self.utility(state),None)
+        move_to_make=None
+        D=0
+        curr_val=0
+        if maximizing_player:
+            while not self.no_more_time() and not D==depth:
+                curr_val=-INFINITY
+                for move in child_moves:
+                    new_state = copy.deepcopy(state)
+                    new_state.perform_move(move[0], move[1])
+                    new_state.curr_player=OPPONENT_COLOR[new_state.curr_player]
+                    val=self.recursive_search(new_state,D,False)
+                    if curr_val < val:
+                        curr_val=val
+                        move_to_make=move
+                D = D + 1
+        else:
+            print('here')
+            while not self.no_more_time() and not D == depth:
+                curr_val = self.recursive_search(state,D+1,False)
+                move_to_make = None
+                D = D + 1
+        return (curr_val,move_to_make)
+
+
 
 
 class MiniMaxWithAlphaBetaPruning:
@@ -121,3 +171,17 @@ class MiniMaxWithAlphaBetaPruning:
         :return: A tuple: (The alpha-beta algorithm value, The move in case of max node or None in min mode)
         """
         return self.utility(state), None
+
+def ut(state):
+    return random.randint(5,10)
+def time():
+    return False
+def sd(state):
+    num = random.randint(0,110)
+    if num==5:
+        return True
+    return False
+
+test=MiniMaxAlgorithm(ut,'black',time,sd)
+b_state=GameState()
+print(test.search(b_state,100,True))
