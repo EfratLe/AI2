@@ -38,6 +38,8 @@ from subprocess import run
 #                              Section F
 # ===============================================================================
 # Debugging
-# run("python run_game.py 2 2 5 n AI2_204536270_204498711.better_player AI2_204536270_204498711.better_player")
-# run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.better_player AI2_204536270_204498711.better_player")
+# run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.competition_player simple_player")
+# run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.competition_player AI2_204536270_204498711.better_player")
+# run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.better_player AI2_204536270_204498711.competition_player")
+# run("python run_game.py 6000 6000 1 n simple_player AI2_204536270_204498711.competition_player")
 
