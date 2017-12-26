@@ -56,6 +56,9 @@ class GameRunner:
             return True
 
         self.players[player_type] = player
+
+        # TODO: for debugging. delete.
+        # print("For player " + repr(player) + " took " + str(measured_time) + " to setup")
         return measured_time > self.setup_time
 
     def run(self):
