@@ -1,7 +1,7 @@
 from abstract import AbstractPlayer
 from Reversi.board import GameState
 from Reversi.consts import EM, OPPONENT_COLOR, BOARD_COLS, BOARD_ROWS, X_PLAYER, O_PLAYER
-import time
+from time import time
 import copy
 
 
@@ -31,7 +31,7 @@ class Player(AbstractPlayer):
         self.board_opening_lost_track = False
 
     def get_move(self, game_state: GameState, possible_moves: list):
-        self.clock = time.time()
+        self.clock = time()
         self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.05
         if len(possible_moves) == 1:
             return possible_moves[0]
@@ -74,7 +74,7 @@ class Player(AbstractPlayer):
             self.time_remaining_in_round = self.time_per_k_turns
         else:
             self.turns_remaining_in_round -= 1
-            self.time_remaining_in_round -= (time.time() - self.clock)
+            self.time_remaining_in_round -= (time() - self.clock)
 
         return best_move
 
@@ -166,7 +166,7 @@ class Player(AbstractPlayer):
         return False
 
     def no_more_time(self):
-        return (time.time() - self.clock) >= self.time_for_current_move
+        return (time() - self.clock) >= self.time_for_current_move
 
     def __repr__(self):
         return '{} {}'.format(AbstractPlayer.__repr__(self), 'better')
@@ -178,6 +178,7 @@ class Player(AbstractPlayer):
         if common_moves:
             best_move = sorted(common_moves.items(), key=lambda x: x[1], reverse=True)[0][0]
             return int(best_move[self.num_round]), int(best_move[self.num_round+1])
+
         self.board_opening_lost_track = True
         return None
 
@@ -198,16 +199,14 @@ class Player(AbstractPlayer):
         with open("Reversi/book.gam") as f:
             lines = f.readlines()
 
-        ten_first_openings = [line[:30] for line in lines]
-        sorted_openings = Counter(ten_first_openings).most_common(10)
+        ten_first_openings = [line[:10*3] for line in lines]
+        sorted_openings = Counter(ten_first_openings).most_common(70)
 
         # Adjusting the openings to our table - performs reflection around the vertical axis \
         # and convert to zero-base
         opp_cols = {'a': '7', 'b': '6', 'c': '5', 'd': '4', 'e': '3', 'f': '2', 'g': '1', 'h': '0',
                     '1': '0', '2': '1', '3': '2', '4': '3', '5': '4', '6': '5', '7': '6', '8': '7'}
-        opp_sorted_openings = {}
-        for opening, occurrences in sorted_openings:
-            opp_opening = "".join([opp_cols.get(c, c) for c in opening])
-            opp_sorted_openings[opp_opening] = occurrences
+        opp_sorted_openings = {"".join([opp_cols.get(c, c) for c in opening]): occurrences for opening, occurrences in
+                               sorted_openings}
 
         return opp_sorted_openings
