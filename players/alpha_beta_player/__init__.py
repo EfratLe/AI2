@@ -3,11 +3,10 @@
 # ===============================================================================
 
 import abstract
-from utils import INFINITY, run_with_limited_time, ExceededTimeError, MiniMaxWithAlphaBetaPruning
-from Reversi.consts import EM, OPPONENT_COLOR, BOARD_COLS, BOARD_ROWS
+from utils import INFINITY, MiniMaxWithAlphaBetaPruning
 import time
-import copy
-from collections import defaultdict
+
+from players.utilities import better_utility, simple_utility
 
 
 # ===============================================================================
@@ -40,26 +39,8 @@ class Player(abstract.AbstractPlayer):
         return move
 
     def utility(self, state):
-        if len(state.get_possible_moves()) == 0:
-            return INFINITY if state.curr_player != self.color else -INFINITY
-
-        my_u = 0
-        op_u = 0
-        for x in range(BOARD_COLS):
-            for y in range(BOARD_ROWS):
-                if state.board[x][y] == self.color:
-                    my_u += 1
-                if state.board[x][y] == OPPONENT_COLOR[self.color]:
-                    op_u += 1
-
-        if my_u == 0:
-            # I have no tools left
-            return -INFINITY
-        elif op_u == 0:
-            # The opponent has no tools left
-            return INFINITY
-        else:
-            return my_u - op_u
+        # return better_utility(state, self.color)
+        return simple_utility(state, self.color)
 
     def selective_deepening_criterion(self, state):
         return False
@@ -68,5 +49,4 @@ class Player(abstract.AbstractPlayer):
         return (time.time() - self.clock) >= self.time_for_current_move
 
     def __repr__(self):
-        return '{} {}'.format(abstract.AbstractPlayer.__repr__(self),
-                              'alpha_beta')  # c:\python35\python.exe run_game.py 3 3 3 y simple_player random_player
+        return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'alpha_beta')

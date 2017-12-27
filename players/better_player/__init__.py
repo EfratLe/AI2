@@ -48,19 +48,11 @@ class Player(AbstractPlayer):
             next_state = copy.deepcopy(game_state)
             next_state.perform_move(best_move[0], best_move[1])
 
-            # TODO: for debugging. delete later.
-            # print("# Next State - Player better made the move: [" + str(best_move[0]) + ", " + str(best_move[1]) + "]")
-            # next_state.draw_board()
-
             # Choosing an arbitrary move
             # Get the best move according the utility function
             for move in possible_moves:
                 new_state = copy.deepcopy(game_state)
                 new_state.perform_move(move[0], move[1])
-
-                # TODO: for debugging. delete later.
-                # print("# New State - Player better made the move: [" + str(move[0]) + ", " + str(move[1]) + "]")
-                # new_state.draw_board()
 
                 if self.utility(new_state) > self.utility(next_state):
                     next_state = new_state

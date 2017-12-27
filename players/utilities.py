@@ -27,8 +27,6 @@ def simple_utility(state: GameState, color: str):
 
 
 def better_utility(state: GameState, color: str):
-    if len(state.get_possible_moves()) == 0:
-        return INFINITY if state.curr_player != color else -INFINITY
     # Add 3 more parameters when calculating how much the state is 'good'
     opp_color = OPPONENT_COLOR[color]
 
@@ -54,8 +52,8 @@ def better_utility(state: GameState, color: str):
 
     # Check if we got to a final state and in which condition
     # If we won, finish the heuristic calculation
-    # if not curr_mobility or not opp_mobility:  # Final state
-    #     return INFINITY if curr_disks > opp_disks else -INFINITY
+    if not curr_mobility or not opp_mobility:  # Final state
+        return INFINITY if curr_disks > opp_disks else -INFINITY
 
     mobility_parameter = 0 if curr_mobility + opp_mobility == 0 else 100 * (curr_mobility - opp_mobility) / (curr_mobility + opp_mobility)
 
