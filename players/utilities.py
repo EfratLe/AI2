@@ -27,6 +27,8 @@ def simple_utility(state: GameState, color: str):
 
 
 def better_utility(state: GameState, color: str):
+    if len(state.get_possible_moves()) == 0:
+        return INFINITY if state.curr_player != color else -INFINITY
     # Add 3 more parameters when calculating how much the state is 'good'
     opp_color = OPPONENT_COLOR[color]
 
