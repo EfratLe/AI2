@@ -34,6 +34,33 @@ from subprocess import run
 #     run("python run_game.py 2 5 5 n AI2_204536270_204498711.better_player simple_player")
 
 # TODO: Insert Efrat parts here - C, D, E
+# ===============================================================================
+#                              Section C
+# ===============================================================================
+# The parameters for 'run_game.py' are:
+# setup_time, time_per_k_turns, k, verbose, x_player, o_player
+
+print("Simple player starts:")
+for _ in range(3):
+    run("python run_game.py 2 2 5 n simple_player AI2_204536270_204498711.min_max_player")
+print("\nBetter player starts:")
+for _ in range(3):
+    run(
+        "python run_game.py 2 2 5 n AI2_204536270_204498711.min_max_player simple_player")
+
+# ===============================================================================
+#                              Section D
+# ===============================================================================
+# The parameters for 'run_game.py' are:
+# setup_time, time_per_k_turns, k, verbose, x_player, o_player
+
+print("Simple player starts:")
+for _ in range(3):
+    run("python run_game.py 2 2 5 n simple_player AI2_204536270_204498711.alpha_beta_player")
+print("\nBetter player starts:")
+for _ in range(3):
+    run(
+        "python run_game.py 2 2 5 n AI2_204536270_204498711.alpha_beta_player simple_player")
 
 # ===============================================================================
 #                              Section F
@@ -43,4 +70,3 @@ from subprocess import run
 # run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.competition_player AI2_204536270_204498711.better_player")
 # run("python run_game.py 6000 6000 1 n AI2_204536270_204498711.better_player AI2_204536270_204498711.competition_player")
 # run("python run_game.py 6000 6000 1 n simple_player AI2_204536270_204498711.competition_player")
-

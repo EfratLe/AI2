@@ -3,7 +3,7 @@
 # ===============================================================================
 
 import abstract
-from utils import INFINITY, run_with_limited_time, ExceededTimeError, MiniMaxAlgorithm
+from utils import INFINITY, run_with_limited_time, ExceededTimeError, MiniMaxWithAlphaBetaPruning
 from Reversi.consts import EM, OPPONENT_COLOR, BOARD_COLS, BOARD_ROWS
 import time
 import copy
@@ -23,18 +23,18 @@ class Player(abstract.AbstractPlayer):
         # Taking a spare time of 0.05 seconds.
         self.turns_remaining_in_round = self.k
         self.time_remaining_in_round = self.time_per_k_turns
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.05
 
     def get_move(self, game_state, possible_moves):
         self.clock = time.time()
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2  #TOCHANGE
-        minimaxObject = MiniMaxAlgorithm(self.utility, self.color, self.no_more_time,
-                                         self.selective_deepening_criterion)
-        D=1
-        (value,move)=(0,possible_moves[0])
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2
+        minimaxObject = MiniMaxWithAlphaBetaPruning(self.utility, self.color, self.no_more_time,
+                                                    self.selective_deepening_criterion)
+        D = 1
+        (value, move) = (0, possible_moves[0])
         while not self.no_more_time():
-            (value,move)=minimaxObject.search(game_state,D,True)
-            D=D+1
+            (value, move) = minimaxObject.search(game_state, D, -INFINITY, INFINITY, True)
+            D = D + 1
         return move
 
     def utility(self, state):
@@ -60,13 +60,11 @@ class Player(abstract.AbstractPlayer):
             return my_u - op_u
 
     def selective_deepening_criterion(self, state):
-        # Simple player does not selectively deepen into certain nodes.
         return False
 
     def no_more_time(self):
         return (time.time() - self.clock) >= self.time_for_current_move
 
     def __repr__(self):
-        return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'min_max')
-
-# c:\python35\python.exe run_game.py 3 3 3 y simple_player random_player
+        return '{} {}'.format(abstract.AbstractPlayer.__repr__(self),
+                              'alpha_beta')  # c:\python35\python.exe run_game.py 3 3 3 y simple_player random_player
