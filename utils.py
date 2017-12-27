@@ -113,8 +113,8 @@ class MiniMaxAlgorithm:
         """
         child_moves = state.get_possible_moves()
         if len(child_moves) == 0 or depth == 0 or self.no_more_time():
-            return (self.utility(state), None)
-        move_to_make = None
+            return (self.utility(state), child_moves[0])
+        move_to_make = child_moves[0]
         curr_val = 0
         if maximizing_player:
             curr_val = -INFINITY
@@ -170,7 +170,7 @@ class MiniMaxWithAlphaBetaPruning:
                 if curr >= beta:
                     return INFINITY
             else:
-                curr = min(curr, self.recursive_search(new_state, depth - 1, not max_or_min, alpha, bet))
+                curr = min(curr, self.recursive_search(new_state, depth - 1, not max_or_min, alph, bet))
                 bet = curr
                 if curr <= alpha:
                     return -INFINITY
@@ -188,8 +188,8 @@ class MiniMaxWithAlphaBetaPruning:
         """
         child_moves = state.get_possible_moves()
         if len(child_moves) == 0 or depth == 0 or self.no_more_time():
-            return (self.utility(state), None)
-        move_to_make = None
+            return (self.utility(state), child_moves[0])
+        move_to_make = child_moves[0]
         curr_val = 0
         alph = -INFINITY
         bet = INFINITY
@@ -206,7 +206,7 @@ class MiniMaxWithAlphaBetaPruning:
         else:
             curr_val = self.recursive_search(state, depth, False, alph, bet)
             move_to_make = None
-        return curr_val, move_to_make
+        return (curr_val, move_to_make)
 
 
 def ut(state):
@@ -219,6 +219,7 @@ def time3():
 
 def sd(state):
     return False
+
 
 '''
 temp = time.time()

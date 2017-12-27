@@ -9,8 +9,6 @@ import time
 import copy
 from collections import defaultdict
 
-from players.utilities import better_utility, simple_utility
-
 
 # ===============================================================================
 # Player
@@ -40,7 +38,26 @@ class Player(abstract.AbstractPlayer):
         return move
 
     def utility(self, state):
-        return better_utility(state, self.color)
+        if len(state.get_possible_moves()) == 0:
+            return INFINITY if state.curr_player != self.color else -INFINITY
+
+        my_u = 0
+        op_u = 0
+        for x in range(BOARD_COLS):
+            for y in range(BOARD_ROWS):
+                if state.board[x][y] == self.color:
+                    my_u += 1
+                if state.board[x][y] == OPPONENT_COLOR[self.color]:
+                    op_u += 1
+
+        if my_u == 0:
+            # I have no tools left
+            return -INFINITY
+        elif op_u == 0:
+            # The opponent has no tools left
+            return INFINITY
+        else:
+            return my_u - op_u
 
     def selective_deepening_criterion(self, state):
         # Simple player does not selectively deepen into certain nodes.
@@ -51,3 +68,5 @@ class Player(abstract.AbstractPlayer):
 
     def __repr__(self):
         return '{} {}'.format(abstract.AbstractPlayer.__repr__(self), 'min_max')
+
+# c:\python35\python.exe run_game.py 3 3 3 y simple_player random_player
