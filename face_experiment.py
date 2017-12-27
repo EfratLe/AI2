@@ -28,7 +28,7 @@ def run_threads():
             if p1 == p2:
                 continue
             for time in times:
-                if num_of_threads > 4:
+                if num_of_threads >= 6:
                     for t in threads:
                         t.join()
                     num_of_threads = 0

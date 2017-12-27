@@ -40,8 +40,8 @@ class Player(AbstractPlayer):
 
         best_move = None
         # Check if haven't got to the 10th turn
-        if not self.board_opening_lost_track and self.num_round - 1 < 10*3:
-            best_move = self.opening_move(game_state)
+        # if not self.board_opening_lost_track and self.num_round - 1 < 10*3:
+        #     best_move = self.opening_move(game_state)
         self.num_round += 6
         if best_move is None:
             best_move = possible_moves[0]
