@@ -206,7 +206,7 @@ class MiniMaxWithAlphaBetaPruning:
         else:
             curr_val = self.recursive_search(state, depth, False, alph, bet)
             move_to_make = None
-        return (curr_val, move_to_make)
+        return curr_val, move_to_make
 
 
 def ut(state):
