@@ -28,7 +28,7 @@ class Player(abstract.AbstractPlayer):
         if len(possible_moves) == 1:
             return possible_moves[0]
         self.clock = time.time()
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - self.time_remaining_in_round*0.1
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - self.time_per_k_turns*0.05
         minimaxObject = MiniMaxWithAlphaBetaPruning(self.utility, self.color, self.no_more_time,
                                                     self.selective_deepening_criterion)
         D = 1
