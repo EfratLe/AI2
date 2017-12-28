@@ -27,13 +27,15 @@ class Player(abstract.AbstractPlayer):
         if len(possible_moves) == 1:
             return possible_moves[0]
         self.clock = time.time()
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2  #TOCHANGE
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - self.time_remaining_in_round*0.1  #TOCHANGE
         minimaxObject = MiniMaxAlgorithm(self.utility, self.color, self.no_more_time,
                                          self.selective_deepening_criterion)
         D=1
         (value,move)=(0,possible_moves[0])
         while not self.no_more_time():
-            (value,move)=minimaxObject.search(game_state,D,True)
+            (value,move1)=minimaxObject.search(game_state,D,True)
+            if not self.no_more_time():
+                move=move1
             D=D+1
         return move
 

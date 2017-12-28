@@ -22,19 +22,21 @@ class Player(abstract.AbstractPlayer):
         # Taking a spare time of 0.05 seconds.
         self.turns_remaining_in_round = self.k
         self.time_remaining_in_round = self.time_per_k_turns
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.05
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2
 
     def get_move(self, game_state, possible_moves):
         if len(possible_moves) == 1:
             return possible_moves[0]
         self.clock = time.time()
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - self.time_remaining_in_round*0.1
         minimaxObject = MiniMaxWithAlphaBetaPruning(self.utility, self.color, self.no_more_time,
                                                     self.selective_deepening_criterion)
         D = 1
         (value, move) = (0, possible_moves[0])
         while not self.no_more_time():
-            (value, move) = minimaxObject.search(game_state, D, -INFINITY, INFINITY, True)
+            (value, move1) = minimaxObject.search(game_state, D, -INFINITY, INFINITY, True)
+            if not self.no_more_time():
+                move=move1
             D = D + 1
         return move
 
