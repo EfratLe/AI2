@@ -50,8 +50,7 @@ def better_utility(state: GameState, color: str):
     opp_mobility = len(state.get_possible_moves())
     state.curr_player = real_curr_player
 
-    # Check if we got to a final state and in which condition
-    # If we won, finish the heuristic calculation
+    # Check if we got to a final state and in which condition.
     if not curr_mobility or not opp_mobility:  # Final state
         return INFINITY if curr_disks > opp_disks else -INFINITY
 
