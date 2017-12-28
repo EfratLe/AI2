@@ -162,6 +162,8 @@ class MiniMaxWithAlphaBetaPruning:
         else:
             curr = INFINITY
         for move in child_moves:
+            if self.no_more_time():
+                return self.utility(state)
             new_state = copy.deepcopy(state)
             new_state.perform_move(move[0], move[1])
             if max_or_min:
@@ -177,6 +179,102 @@ class MiniMaxWithAlphaBetaPruning:
         return curr
 
     def search(self, state, depth, alpha, beta, maximizing_player):
+        """Start the MiniMax algorithm.
+
+        :param state: The state to start from.
+        :param depth: The maximum allowed depth for the algorithm.
+        :param alpha: The alpha of the alpha-beta pruning.
+        :param beta: The beta of the alpha-beta pruning.
+        :param maximizing_player: Whether this is a max node (True) or a min node (False).
+        :return: A tuple: (The alpha-beta algorithm value, The move in case of max node or None in min mode)
+        """
+        child_moves = state.get_possible_moves()
+        if len(child_moves) == 0:
+            return (self.utility(state), None)
+        if self.no_more_time() :
+            return (self.utility(state), child_moves[0])
+        if depth <= 0:
+            if not self.selective_deepening(state):
+                return (self.utility(state), child_moves[0])
+        if maximizing_player:
+            curr = -INFINITY
+        else:
+            curr = INFINITY
+        returnValue=(self.utility(state), child_moves[0])
+        for move in child_moves:
+            new_state = copy.deepcopy(state)
+            new_state.perform_move(move[0], move[1])
+            if maximizing_player:
+                curr_val = self.search(new_state, depth - 1, alpha, beta, not maximizing_player)
+                if curr_val[0] > curr:
+                    curr=curr_val[0]
+                    returnValue=(curr_val[0],move)
+                alpha = curr
+                if curr >= beta:
+                    return (INFINITY,move)
+            else:
+                curr_val=self.search(new_state, depth - 1, alpha, beta, not maximizing_player)
+                if curr_val[0] < curr:
+                    curr=curr_val[0]
+                    returnValue=(curr_val[0],move)
+                beta = curr
+                if curr <= alpha:
+                    return (-INFINITY,move)
+        return returnValue
+'''
+    def search(self, state, depth, alpha, beta, maximizing_player):
+        print(depth)
+        """Start the MiniMax algorithm.
+
+        :param state: The state to start from.
+        :param depth: The maximum allowed depth for the algorithm.
+        :param alpha: The alpha of the alpha-beta pruning.
+        :param beta: The beta of the alpha-beta pruning.
+        :param maximizing_player: Whether this is a max node (True) or a min node (False).
+        :return: A tuple: (The alpha-beta algorithm value, The move in case of max node or None in min mode)
+        """
+        child_moves = state.get_possible_moves()
+        if len(child_moves) == 0:
+            return (self.utility(state), None)
+        if self.no_more_time() :
+            return (self.utility(state), child_moves[0])
+        if depth <= 0:
+            if not self.selective_deepening(state):
+                return (self.utility(state), child_moves[0])
+        alph = -INFINITY
+        bet = INFINITY
+        if maximizing_player:
+            curr = -INFINITY
+        else:
+            curr = INFINITY
+        returnValue=(self.utility(state), child_moves[0])
+        for move in child_moves:
+            if self.no_more_time():
+                return returnValue
+            new_state = copy.deepcopy(state)
+            new_state.perform_move(move[0], move[1])
+            if maximizing_player:
+                curr_val = self.search(new_state, depth - 1, alph, bet, not maximizing_player)
+                if curr_val[0] > curr:
+                    curr=curr_val[0]
+                    returnValue=(curr_val[0],move)
+                alph = curr
+                if curr >= beta:
+                    return (INFINITY,move)
+            else:
+                curr_val=self.search(new_state, depth - 1, alph, bet, not maximizing_player)
+                if curr_val[0] < curr:
+                    curr=curr_val[0]
+                    returnValue=(curr_val[0],move)
+                bet = curr
+                if curr <= alpha:
+                    return (-INFINITY,move)
+        print(depth)
+        return returnValue
+'''
+
+'''
+ def search(self, state, depth, alpha, beta, maximizing_player):
         """Start the MiniMax algorithm.
 
         :param state: The state to start from.
@@ -207,7 +305,7 @@ class MiniMaxWithAlphaBetaPruning:
             curr_val = self.recursive_search(state, depth, False, alph, bet)
             move_to_make = None
         return (curr_val, move_to_make)
-
+'''
 
 def ut(state):
     return -len(state.get_possible_moves())
@@ -220,16 +318,16 @@ def time3():
 def sd(state):
     return False
 
-
 '''
 temp = time.time()
 test = MiniMaxAlgorithm(ut, 'black', time3, sd)
 b_state = GameState()
-print(test.search(b_state, 6, True))
+print(test.search(b_state, , True))
 print(time.time() - temp)
 
+b_state = GameState()
 temp = time.time()
 test1 = MiniMaxWithAlphaBetaPruning(ut, 'bla', time3, sd)
-print(test1.search(b_state, 6, -INFINITY, INFINITY, True))
+print(test1.search(b_state, , -INFINITY, INFINITY, True))
 print(time.time() - temp)
 '''

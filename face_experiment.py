@@ -5,11 +5,15 @@ from matplotlib import pyplot as plt
 import os
 import shutil
 
+num_of_cores = 1
+sema = threading.Semaphore(value=num_of_cores)
 players = ['simple_player', 'alpha_beta_player', 'min_max_player', 'better_player']
 times = ['2', '10', '50']
 
 
 def call_to(time, p1, p2):
+    sema.acquire()
+
     file_name = 'temp/' + p1 + p2 + time + '.txt'
     file = open(file_name, 'w+')
 
@@ -19,20 +23,16 @@ def call_to(time, p1, p2):
 
     file.close()
 
+    sema.release()
+
 
 def run_threads():
     threads = []
-    num_of_threads = 0
     for p1 in players:
         for p2 in players:
             if p1 == p2:
                 continue
             for time in times:
-                if num_of_threads >= 6:
-                    for t in threads:
-                        t.join()
-                    num_of_threads = 0
-                num_of_threads += 1
                 t = threading.Thread(target=call_to, args=[time, p1, p2])
                 threads.append(t)
                 t.start()

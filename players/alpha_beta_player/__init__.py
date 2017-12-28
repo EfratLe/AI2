@@ -41,8 +41,8 @@ class Player(abstract.AbstractPlayer):
         return move
 
     def utility(self, state):
-        # return better_utility(state, self.color)
-        return simple_utility(state, self.color)
+        return better_utility(state, self.color)
+        #return simple_utility(state, self.color)
 
     def selective_deepening_criterion(self, state):
         return False
