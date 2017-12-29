@@ -5,7 +5,7 @@ from subprocess import run
 #                       Trying to play by ourselves
 # ===============================================================================
 # Interactive game against 'simple_player'
-# run("python run_game.py 2 5 5 y interactive simple_player")
+# run("python run_game.py 2 5 5 y interactive competition_player")
 
 # ===============================================================================
 #                              Section A
@@ -77,8 +77,14 @@ from subprocess import run
 # ===============================================================================
 #                              Section G
 # ===============================================================================
-run("python run_game.py 2 2 5 n alpha_beta_player simple_player")
-run("python run_game.py 2 2 5 n simple_player alpha_beta_player")
-run("python run_game.py 2 2 5 n min_max_player simple_player")
-run("python run_game.py 2 2 5 n simple_player min_max_player")
-run("python run_game.py 2 2 5 n alpha_beta_player min_max_player")
+# run("python run_game.py 2 2 5 n alpha_beta_player simple_player")
+# run("python run_game.py 2 2 5 n simple_player alpha_beta_player")
+# run("python run_game.py 2 2 5 n min_max_player simple_player")
+# run("python run_game.py 2 2 5 n simple_player min_max_player")
+# run("python run_game.py 2 2 5 n alpha_beta_player min_max_player")
+
+# ===============================================================================
+#                              Section G
+# ===============================================================================
+# run("python run_game.py 2 2 5 n AI2_204536270_204498711.alpha_beta_player AI2_204536270_204498711.min_max_player")
+run("python run_game.py 2 3 5 n AI2_204536270_204498711.competition_player simple_player")
