@@ -29,22 +29,14 @@ def call_to(time, p1, p2):
 def run_threads():
     threads = []
     # All the players against everyone
-    # for p1 in players:
-    #     for p2 in players:
-    #         if p1 == p2:
-    #             continue
-    #         for time in times:
-    #             t = threading.Thread(target=call_to, args=[time, p1, p2])
-    #             threads.append(t)
-    #             t.start()
-
-    # All the players against competition
-    p1 = 'competition_player'
-    for p2 in players:
-        for time in times:
-            t = threading.Thread(target=call_to, args=[time, p1, p2])
-            threads.append(t)
-            t.start()
+    for p1 in players:
+        for p2 in players:
+            if p1 == p2:
+                continue
+            for time in times:
+                t = threading.Thread(target=call_to, args=[time, p1, p2])
+                threads.append(t)
+                t.start()
 
     for t in threads:
         t.join()
