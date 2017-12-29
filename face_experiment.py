@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import os
 import shutil
 
-num_of_cores = 1
+num_of_cores = 6
 sema = threading.Semaphore(value=num_of_cores)
 players = ['simple_player', 'alpha_beta_player', 'min_max_player', 'better_player']
 times = ['2', '10', '50']
@@ -43,7 +43,7 @@ def run_threads():
 
 def create_final_result_and_csv_file():
     final_result = {player: {t: 0 for t in times} for player in players}
-    final = open('final.csv', 'w')
+    final = open('experiments.csv', 'w')
     for p1 in players:
         for p2 in players:
             if p1 == p2:
