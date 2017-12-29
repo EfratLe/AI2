@@ -1,8 +1,9 @@
 from abstract import AbstractPlayer
 from Reversi.board import GameState
-from Reversi.consts import EM, OPPONENT_COLOR, BOARD_COLS, BOARD_ROWS, X_PLAYER, O_PLAYER
+from Reversi.consts import EM, OPPONENT_COLOR, BOARD_COLS, BOARD_ROWS, X_PLAYER
 from time import time
 import copy
+from utils import INFINITY, MiniMaxWithAlphaBetaPruning
 
 from players.utilities import better_utility
 
@@ -16,67 +17,47 @@ class Player(AbstractPlayer):
         # Taking a spare time of 0.05 seconds.
         self.turns_remaining_in_round = self.k
         self.time_remaining_in_round = self.time_per_k_turns
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.05
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.2
 
         # Fields for opening book
-        self.moves_till_now = ""
-        self.game_board = GameState().board
-        if self.color == X_PLAYER:
-            self.sign = '+'
-            self.opponent_sign = '-'
-            self.num_round = 1
-        else:
-            self.sign = '-'
-            self.opponent_sign = '+'
-            self.num_round = 4
-        self.board_opening_lost_track = False
-        self.dict_for_10_common_openings = self._calculate_ten_common_openings()
+        # self.moves_till_now = ""
+        # self.game_board = GameState().board
+        # if self.color == X_PLAYER:
+        #     self.sign = '+'
+        #     self.opponent_sign = '-'
+        #     self.num_round = 1
+        # else:
+        #     self.sign = '-'
+        #     self.opponent_sign = '+'
+        #     self.num_round = 4
+        # self.board_opening_lost_track = False
+        # self.dict_for_10_common_openings = self._calculate_ten_common_openings()
 
     def get_move(self, game_state: GameState, possible_moves: list):
-        self.clock = time()
-        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - 0.05
         if len(possible_moves) == 1:
             return possible_moves[0]
+        self.clock = time()
+        self.time_for_current_move = self.time_remaining_in_round / self.turns_remaining_in_round - self.time_per_k_turns * 0.05
 
         best_move = None
         # Check if haven't got to the 10th turn
         # if not self.board_opening_lost_track and self.num_round - 1 < 10*3:
         #     best_move = self.opening_move(game_state)
-        self.num_round += 6
-        if best_move is None:
-            best_move = possible_moves[0]
-            next_state = copy.deepcopy(game_state)
-            next_state.perform_move(best_move[0], best_move[1])
+        # self.num_round += 6
+        minimaxObject = MiniMaxWithAlphaBetaPruning(self.utility, self.color, self.no_more_time,
+                                                    self.selective_deepening_criterion)
+        D = 1
+        (value, best_move) = (0, possible_moves[0])
+        while not self.no_more_time():
+            (value, move1) = minimaxObject.search(game_state, D, -INFINITY, INFINITY, True)
+            if not self.no_more_time():
+                best_move = move1
+            D = D + 1
 
-            # TODO: for debugging. delete later.
-            # print("# Next State - Player better made the move: [" + str(best_move[0]) + ", " + str(best_move[1]) + "]")
-            # next_state.draw_board()
-
-            # Choosing an arbitrary move
-            # Get the best move according the utility function
-            for move in possible_moves:
-                new_state = copy.deepcopy(game_state)
-                new_state.perform_move(move[0], move[1])
-
-                # TODO: for debugging. delete later.
-                # print("# New State - Player better made the move: [" + str(move[0]) + ", " + str(move[1]) + "]")
-                # new_state.draw_board()
-
-                if self.utility(new_state) > self.utility(next_state):
-                    next_state = new_state
-                    best_move = move
-
-        self.moves_till_now += self.sign + str(best_move[0]) + str(best_move[1])
-        next_state = copy.deepcopy(game_state)
-        next_state.perform_move(best_move[0], best_move[1])
-        self.game_board = next_state.board
-
-        if self.turns_remaining_in_round == 1:
-            self.turns_remaining_in_round = self.k
-            self.time_remaining_in_round = self.time_per_k_turns
-        else:
-            self.turns_remaining_in_round -= 1
-            self.time_remaining_in_round -= (time() - self.clock)
+        # self.moves_till_now += self.sign + str(best_move[0]) + str(best_move[1])
+        # next_state = copy.deepcopy(game_state)
+        # next_state.perform_move(best_move[0], best_move[1])
+        # self.game_board = next_state.board
 
         return best_move
 
