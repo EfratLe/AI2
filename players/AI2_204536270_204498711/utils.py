@@ -222,13 +222,3 @@ class MiniMaxWithAlphaBetaPruning:
                     return (-INFINITY,move)
         return returnValue
 
-def ut(state):
-    return -len(state.get_possible_moves())
-
-
-def time3():
-    return False
-
-
-def sd(state):
-    return False
